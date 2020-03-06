@@ -12,15 +12,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
-   private var appPreferences = "settings"
-    private var appResultvalue=1
+    private var appPreferences = "settings"
+    private var appResultvalue = 1.toString()
 
     private var resultValue = 1
     private var valueText: TextView? = null
     private var incrementButton: FloatingActionButton? = null
     private var container: ConstraintLayout? = null
     private var navigationButton: Button? = null
-    private var mSettings : SharedPreferences? = null
+    private var mSettings: SharedPreferences? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,21 +29,25 @@ class MainActivity : AppCompatActivity() {
 
         mSettings = getSharedPreferences(appPreferences, Context.MODE_PRIVATE)
 
-        valueText?.text = mSettings?.getString(appResultvalue.toString(), "")
+        valueText?.text = mSettings?.getInt(appResultvalue, 0).toString()
 
         incrementButton?.setOnClickListener {
             resultValue++
             valueText?.text = resultValue.toString()
+            val editor = mSettings?.edit()
+            editor?.putInt(appResultvalue.toString(), resultValue)
+            editor?.apply()
         }
 
         container?.setOnClickListener {
             resultValue++
             valueText?.text = resultValue.toString()
+            val editor = mSettings?.edit()
+            editor?.putInt(appResultvalue.toString(), resultValue)
+            editor?.apply()
         }
 
-        val editor = mSettings?.edit()
-        editor?.putInt(appResultvalue.toString(), resultValue);
-        editor?.apply()
+
         navigationButton?.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
